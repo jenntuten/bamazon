@@ -1,18 +1,21 @@
 let mysql = require("mysql");
 let inquirer = require('inquirer');
+let fs = require('fs');
 let connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "",
+    password: "monday10",
     database: "bamazon"
 });
-
 connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
+    fs.writeFile("bamazonCart.txt", "", function(err) {
+        if ( err ) return console.log(err);
+        console.log("You have $0 in your cart. Start shopping!");
+    }); 
     shop();
-
 });
 //node bamazonCustomerConnection
 //The app should then prompt users with two messages.
@@ -47,9 +50,15 @@ function shop() {
                 name: "units",
                 message: "How many units would you like to buy?",
             },
+            {
+                type: "list",
+                name: "complete",
+                message: "Will this complete your order?",
+                choices: ['Done shopping', 'Continue Shopping']
+            }
         ]).then(function (user) {
             let itemSelected;
-            for (var p = 0; p < res.length; p++) {
+            for (let p = 0; p < res.length; p++) {
                 if (res[p].product_name === user.choices) {
                     itemSelected = res[p];
                     //console.log('chosen Item name',itemSelected.product_name);
@@ -63,9 +72,47 @@ function shop() {
                         connection.query(
                             "UPDATE products SET stock_quantity = " + newQty + "WHERE product_name = " + itemSelected.product_name,
                             function (err, res) {
-                                console.log('That will be $' + (itemSelected.price * user.units));
+                                let userPrice = itemSelected.price*user.units;
+                                console.log('That will be $' + userPrice);
+                                fs.appendFile("bamazonCart.txt", ", " + userPrice, function (err) {
+                                    if (err) {
+                                        return console.log(err);
+                                    }
+                                    console.log('Added to cart!')
+                                    if (user.complete === 'Done shopping') {
+                                        fs.readFile("bamazonCart.txt", "utf8", function (err, data) {
+                                            if (err) {
+                                                return console.log(err);
+                                            }
+                                            //console.log(data)
+                                            data = data.split(", ");
+                                            let result = 0;
+                                            for (let i = 0; i < data.length; i++) {
+                                                if (parseFloat(data[i])) {
+                                                    result += parseFloat(data[i]);
+                                                }
+                                            }
+                                            console.log("Thanks for shopping with Bamazon! Your total is $" + result.toFixed(2)+".");
+                                        });
+                                    }
+                                    else {
+                                        fs.readFile("bamazonCart.txt", "utf8", function (err, data) {
+                                            if (err) {
+                                                return console.log(err);
+                                            }
+                                            data = data.split(", ");
+                                            let result = 0;
+                                            for (let i = 0; i < data.length; i++) {
+                                                if (parseFloat(data[i])) {
+                                                    result += parseFloat(data[i]);
+                                                    console.log("You have a total of $" + result.toFixed(2)+" in your cart.");
+                                                }
+                                            }
+                                        });
+                                        shop();
+                                    }
+                                });
                                 //console.log('New Quantity is '+newQty+' units.')
-                                shop();
                             }
                         );
                     }
