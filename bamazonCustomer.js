@@ -59,10 +59,12 @@ function shop() {
                     }
                     else {
                         console.log('Plenty in stock!');
+                        let newQty = itemSelected.stock_quantity - user.units;
                         connection.query(
-                            "UPDATE products SET stock_quantity = stock_quantity -" + user.units + "WHERE product_name = itemSelected.product_name",
+                            "UPDATE products SET stock_quantity = " + newQty + "WHERE product_name = " + itemSelected.product_name,
                             function (err, res) {
                                 console.log('That will be $' + (itemSelected.price * user.units));
+                                //console.log('New Quantity is '+newQty+' units.')
                                 shop();
                             }
                         );
