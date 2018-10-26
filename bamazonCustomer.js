@@ -7,7 +7,7 @@ let connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "monday10",
+    password: "",
     database: "bamazon"
 });
 //Establishes connection to mySQL database
@@ -33,7 +33,7 @@ function shop() {
                 name: "choices",
                 message: "Which item would you like to buy?",
                 choices: function () {
-                    return res.map(item => `${item.item_id} | ${item.product_name} | $${item.price} | ${item.stock_quantity} available`);
+                    return res.map(item => `${item.item_id} | ${item.product_name} | $${item.price.toFixed(2)} | ${item.stock_quantity} available`);
                 }
             },
             {
@@ -45,7 +45,7 @@ function shop() {
             let itemSelected;
             //Matches user's choice to the appropriate item in the database    
             for (let p = 0; p < res.length; p++) {
-                if (res[p].item_id + " | " + res[p].product_name + " | $" + res[p].price + " | " + res[p].stock_quantity + " available" === user.choices) {
+                if (res[p].item_id + " | " + res[p].product_name + " | $" + res[p].price.toFixed(2) + " | " + res[p].stock_quantity + " available" === user.choices) {
                     itemSelected = res[p];
                     //Returns whether the quantity is sufficient - the user is notified either way
                     if (itemSelected.stock_quantity < user.units) {
