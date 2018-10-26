@@ -5,7 +5,7 @@ let connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "monday10",
+    password: "",
     database: "bamazon"
 });
 //Establish connection to mySQL database
@@ -31,7 +31,6 @@ function shop() {
                 message: "Which item would you like to buy?",
                 choices: function () { 
                     return res.map(item => `${item.item_id} | ${item.product_name} | $${item.price} | ${item.stock_quantity} available`);
-                    console.log('user choices',user.choices)
                 }
             },
             {
@@ -39,7 +38,6 @@ function shop() {
                 name: "units",
                 message: "How many units would you like to buy?",
             },
-            
         ]).then(function (user) {
             let itemSelected;
 //Matches user's choice to the appropriate item in the database    
@@ -56,7 +54,7 @@ function shop() {
                         console.log('Item Selected: ', user.choices);
                         let newQty = itemSelected.stock_quantity - user.units;
                         connection.query(
-                            "UPDATE products SET stock_quantity = " + newQty + "WHERE product_name = " + itemSelected.product_name,
+                            "UPDATE products SET stock_quantity = " + newQty + " WHERE product_name = " + '"'+itemSelected.product_name+'"',
                             function (err, res) {
                                 let userPrice = itemSelected.price*user.units;
                                 //Adds userPrice to bamazonCart.txt
