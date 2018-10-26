@@ -5,7 +5,7 @@ let connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "monday10",
+    password: "",
     database: "bamazon"
 });
 connection.connect(function (err) {
@@ -36,14 +36,14 @@ function shop() {
         }
         inquirer.prompt([
             {
-                type: "rawlist",
+                type: "list",
                 name: "choices",
                 message: "Which item would you like to buy?",
-                choices: function () {
-                    return res.map(function (item) {
-                        return item.product_name;
-                    });
+                choices: function () { 
+                    return res.map(item => `${item.item_id} | ${item.product_name} | $${item.price} | ${item.stock_quantity} available`);
+                    console.log('user choices',user.choices)
                 }
+                
             },
             {
                 type: "input",
@@ -58,9 +58,11 @@ function shop() {
             }
         ]).then(function (user) {
             let itemSelected;
+            
             for (let p = 0; p < res.length; p++) {
-                if (res[p].product_name === user.choices) {
+                if (res[p].item_id + " | " + res[p].product_name + " | $" + res[p].price + " | " + res[p].stock_quantity + " available" === user.choices) {
                     itemSelected = res[p];
+                    //console.log('itemSelected: ',itemSelected)
                     //console.log('chosen Item name',itemSelected.product_name);
                     if (itemSelected.stock_quantity < user.units) {
                         console.log('Not enough in stock!');
@@ -112,7 +114,7 @@ function shop() {
                                         shop();
                                     }
                                 });
-                                //console.log('New Quantity is '+newQty+' units.')
+                                console.log('New Quantity is '+newQty+' units.')
                             }
                         );
                     }
