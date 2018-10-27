@@ -10,7 +10,7 @@ In the screen shot below, the user has chosen the Inflatable Unicorn Horn for Ca
 ![Bamazon Select](https://github.com/jenntuten/bamazon/blob/master/assets/images/2-itemselected.png)\
 \
 When a user enters an invalid item number or enters non-numeric characters when requesting a specific quantity, they will receive an error message. This returns the user to the full list of products so they can continue shopping.\
-![Bamazon Invalid](https://github.com/jenntuten/bamazon/blob/master/assets/images/3-invalid%20item-qty.png)\
+![Bamazon Invalid](https://github.com/jenntuten/bamazon/blob/master/assets/images/3-invalid%20item.png)\
 \
 ![Bamazon InvalidQuantity](https://github.com/jenntuten/bamazon/blob/master/assets/images/4-invalidqty.png)\
 \
