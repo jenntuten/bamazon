@@ -18,7 +18,7 @@ If the user enters a quantity above what's available in inventory, they will rec
 ![Bamazon Insufficient](https://github.com/jenntuten/bamazon/blob/master/assets/images/insufficientqty.png)\
 \
 On this final screen, the user has opted to check out, and the app has calculated the total price of the items in the shopping cart.\
-![Bamazon Checkout](https://github.com/jenntuten/bamazon/blob/master/assets/images/5-checkout.png)\
+![Bamazon Checkout](https://github.com/jenntuten/bamazon/blob/master/assets/images/finalscreen.png)\
 \
 Click the link below to see this in action: \
 \
